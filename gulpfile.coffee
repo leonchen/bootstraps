@@ -11,12 +11,18 @@ log = ->
 stopServer = ->
   return unless pid
   log "killing #{pid}"
-  process.kill(pid)
+  try
+    process.kill(pid)
+  catch e
+    return if e.code == "ESRCH"
+    log "failed to kill", e
 
 startServer = ->
   server = spawn "coffee", ["app.coffee"], {env: process.env, stdio: 'inherit'}
   pid = server.pid
   log "starting server with pid #{pid}"
+  server.on 'error', ->
+
 
 restart = ->
   stopServer()
