@@ -50,4 +50,5 @@ module.exports =
 
   plugins: [
     new webpack.ProvidePlugin(GLOBAL_VARS)
+    new webpack.optimize.UglifyJsPlugin({ compress: { warnings: false } })
   ]
