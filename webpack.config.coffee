@@ -3,28 +3,24 @@ webpack = require 'webpack'
 nodeModules = path.resolve(__dirname, 'node_modules')
 
 VENDORS = [
-  'jquery'
-  'bootstrap'
   'moment'
   'bluebird'
   'eventemitter2'
-  'flux'
   'keymirror'
+  'superagent'
+  'querystring'
   'react'
   'react-dom'
   'react-router'
-  'superagent'
-  'querystring'
+  'flux'
 ]
 
 GLOBAL_VARS =
-  $: "jquery"
-  jQuery: "jquery"
   moment: "moment"
 
-module.exports =
+config =
   entry:
-    app: './assets/js/app.cjsx'
+    app: ['./assets/js/app.cjsx']
     vendor: VENDORS
 
   output:
@@ -50,5 +46,10 @@ module.exports =
 
   plugins: [
     new webpack.ProvidePlugin(GLOBAL_VARS)
-    new webpack.optimize.UglifyJsPlugin({ compress: { warnings: false } })
   ]
+
+# deployments
+if process.env.DEPLOY
+  config.plugins.push new webpack.optimize.UglifyJsPlugin({sourceMap: false, compress: { warnings: false } })
+
+module.exports = config
